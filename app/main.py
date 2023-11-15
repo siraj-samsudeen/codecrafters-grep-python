@@ -9,7 +9,8 @@ def match_pattern(input_line, pattern):
         return pattern in input_line
     elif pattern == '\d':
         for char in input_line:
-            if char.isdigit():
+            if ord(0) < ord(char) < ord(9)
+            # if char.isdigit():
                 return True
         return False
     else:
