@@ -21,6 +21,12 @@ def match_pattern(input_line, pattern):
             if is_digit or is_lower_case or is_upper_case:
                 return True
         return False
+    elif pattern.startswith("[") and pattern.endswith("]"):
+        str_to_match = pattern[1:-1]
+        for char in input_line:
+            if char in str_to_match:
+                return True
+        return False
     else:
         raise RuntimeError(f"Unhandled pattern: {pattern}")
 
