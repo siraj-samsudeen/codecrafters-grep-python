@@ -9,8 +9,16 @@ def match_pattern(input_line, pattern):
         return pattern in input_line
     elif pattern == '\d':
         for char in input_line:
-            if ord(0) < ord(char) < ord(9)
-            # if char.isdigit():
+            is_digit = ord('0') < ord(char) < ord('9')
+            if is_digit:
+                return True
+            return False
+    elif pattern == '\w':
+        for char in input_line:
+            is_digit = ord('0') < ord(char) < ord('9')
+            is_lower_case = ord('a') < ord(char) < ord('z')
+            is_upper_case = ord('A') < ord(char) < ord('Z')
+            if is_digit or is_lower_case or is_upper_case:
                 return True
         return False
     else:
