@@ -10,6 +10,7 @@ def match_pattern(input_line, pattern):
     elif pattern == '\d':
         for char in input_line:
             is_digit = ord('0') < ord(char) < ord('9')
+            is_digit = '0' < char < '9'
             if is_digit:
                 return True
             return False
@@ -21,6 +22,10 @@ def match_pattern(input_line, pattern):
             if is_digit or is_lower_case or is_upper_case:
                 return True
         return False
+    # this has to come before the positive char groups
+    elif pattern.startswith("[^") and pattern.endswith("]"):
+        str_to_match = pattern.strip("[^]")
+        return not any(c in str_to_match for c in input_line)
     elif pattern.startswith("[") and pattern.endswith("]"):
         str_to_match = pattern[1:-1]
         for char in input_line:
