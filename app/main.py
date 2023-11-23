@@ -3,7 +3,7 @@ import sys
 # import pyparsing - available if you need it!
 # import lark - available if you need it!
 
-from grep import match_pattern
+from app.grep import match_pattern
 
 def main():
     pattern = sys.argv[2]
