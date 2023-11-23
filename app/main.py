@@ -3,37 +3,37 @@ import sys
 # import pyparsing - available if you need it!
 # import lark - available if you need it!
 
-
-def match_pattern(input_line, pattern):
-    if len(pattern) == 1:
-        return pattern in input_line
-    elif pattern == '\d':
-        for char in input_line:
-            is_digit = ord('0') < ord(char) < ord('9')
-            is_digit = '0' < char < '9'
-            if is_digit:
-                return True
-            return False
-    elif pattern == '\w':
-        for char in input_line:
-            is_digit = ord('0') < ord(char) < ord('9')
-            is_lower_case = ord('a') < ord(char) < ord('z')
-            is_upper_case = ord('A') < ord(char) < ord('Z')
-            if is_digit or is_lower_case or is_upper_case:
-                return True
-        return False
-    # this has to come before the positive char groups
-    elif pattern.startswith("[^") and pattern.endswith("]"):
-        str_to_match = pattern.strip("[^]")
-        return not any(c in str_to_match for c in input_line)
-    elif pattern.startswith("[") and pattern.endswith("]"):
-        str_to_match = pattern[1:-1]
-        for char in input_line:
-            if char in str_to_match:
-                return True
-        return False
-    else:
-        raise RuntimeError(f"Unhandled pattern: {pattern}")
+from test_grep import match_pattern
+# def match_pattern(input_line, pattern):
+#     if len(pattern) == 1:
+#         return pattern in input_line
+#     elif pattern == '\d':
+#         for char in input_line:
+#             is_digit = ord('0') < ord(char) < ord('9')
+#             is_digit = '0' < char < '9'
+#             if is_digit:
+#                 return True
+#             return False
+#     elif pattern == '\w':
+#         for char in input_line:
+#             is_digit = ord('0') < ord(char) < ord('9')
+#             is_lower_case = ord('a') < ord(char) < ord('z')
+#             is_upper_case = ord('A') < ord(char) < ord('Z')
+#             if is_digit or is_lower_case or is_upper_case:
+#                 return True
+#         return False
+#     # this has to come before the positive char groups
+#     elif pattern.startswith("[^") and pattern.endswith("]"):
+#         str_to_match = pattern.strip("[^]")
+#         return not any(c in str_to_match for c in input_line)
+#     elif pattern.startswith("[") and pattern.endswith("]"):
+#         str_to_match = pattern[1:-1]
+#         for char in input_line:
+#             if char in str_to_match:
+#                 return True
+#         return False
+#     else:
+#         raise RuntimeError(f"Unhandled pattern: {pattern}")
 
 
 def main():
