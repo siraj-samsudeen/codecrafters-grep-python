@@ -33,3 +33,6 @@ def test_match_pattern():
     assert match_pattern('4 cats', r'\d \w\w\ws') 
     assert not match_pattern('1 dog', r'\d \w\w\ws') 
 
+    assert match_pattern('log', '^log')
+    assert not match_pattern('slog', '^log')
+

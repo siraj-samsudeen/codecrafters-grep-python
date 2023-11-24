@@ -31,12 +31,18 @@ def tokenize(pattern):
     return tokens
 
 def match_pattern(input_line, pattern):
+    matchStart = False
+    if pattern.startswith('^'):
+        matchStart = True
+        matchFailed = False
+        pattern = pattern[1:]
+
     tokens = tokenize(pattern)
-    # print("*" * 10, "matching ", repr(pattern), " to ", input_line, " tokens= ", tokens)
+    print("*" * 10, "matching ", repr(pattern), " to ", input_line, " tokens= ", tokens)
     i = j = 0
 
     def process_match(success):
-        nonlocal i, j
+        nonlocal i, j, matchFailed
         if success:
             # if there is a match, move to the next token
             # in case of match, we want to test the next char with next token
@@ -44,6 +50,7 @@ def match_pattern(input_line, pattern):
         else:
             # in case of no match, we want to retry the tokens from the beginning again
             j = 0
+            matchFailed = True
 
         # whether there is a match or not, we move to the next char
         i += 1
@@ -67,6 +74,9 @@ def match_pattern(input_line, pattern):
         else: # literal match
             text = input_line[i: i+len(token)]
             process_match(text == token)
+        
+        if matchStart and matchFailed:
+            return False
     
     # if we exited the loop when all token are matched, then j would match the len of tokens
     return j == len(tokens)
