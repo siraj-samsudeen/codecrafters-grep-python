@@ -36,3 +36,5 @@ def test_match_pattern():
     assert match_pattern('log', '^log')
     assert not match_pattern('slog', '^log')
 
+    assert match_pattern('dog', 'dog$')
+    assert not match_pattern('dogs', 'dog$')
