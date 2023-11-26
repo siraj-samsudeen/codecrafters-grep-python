@@ -10,9 +10,11 @@ def tokenize(pattern):
         token = char_needed = ''
         len_needed = -1
 
-    def flush():
+    def flush(extra=None):
         if token:
             tokens.append(token)
+        if extra:
+            tokens.append(extra)
         reset()
     
     for char in pattern:
@@ -26,6 +28,14 @@ def tokenize(pattern):
         token += char
         if len(token) == len_needed or char == char_needed:
             flush()
+        
+        if char in ['+']:
+            if len(token) > 2: 
+                token, extra = token[:-2], token[-2:]
+                flush(extra)
+                print(token, extra)
+            else:
+                flush()
         # print(char, repr(token), tokens)
     flush()
     return tokens
@@ -33,16 +43,16 @@ def tokenize(pattern):
 def match_pattern(input_line, pattern):
     matchStart = False
     matchEnd = False
+    matchFailed = False
     if pattern.startswith('^'):
         matchStart = True
-        matchFailed = False
         pattern = pattern[1:]
     if pattern.endswith('$'):
         matchEnd = True
         pattern = pattern[:-1]
 
     tokens = tokenize(pattern)
-    # print("*" * 10, "matching ", repr(pattern), " to ", input_line, " tokens= ", tokens)
+    print("*" * 10, "matching ", repr(pattern), " to ", input_line, " tokens= ", tokens)
     i = j = 0
 
     def process_match(success, match_length=1):
@@ -61,8 +71,13 @@ def match_pattern(input_line, pattern):
 
 
     while i < len(input_line) and j < len(tokens):
-        # print(repr(input_line[i]), repr(tokens[j]))
+        # print(repr(input_line[i]), repr(tokens[j]), matchFailed)
         token = tokens[j]
+        repeat_plus = False
+        if token.endswith('+'):
+            repeat_plus = True
+            token = token[:-1]
+
         if token == '\\d':
             process_match(input_line[i].isdigit())
         elif token == '\\w':
@@ -76,15 +91,22 @@ def match_pattern(input_line, pattern):
             else:
                 process_match(input_line[i] in token)
         else: # literal match
-            text = input_line[i: i+len(token)]
-            process_match(text == token, len(token))
+            if repeat_plus:
+                temp = i
+                while token == input_line[temp]:
+                    temp += 1
+                # print(f"found {temp-i}  matches for {token} in {input_line}")
+                process_match(temp > i, (temp-i) or 1)
+            else:
+                text = input_line[i: i+len(token)]
+                process_match(text == token, len(token))
         
         if matchStart and matchFailed:
             return False
     
     # if we exited the loop when all token are matched, then j would match the len of tokens
     if matchEnd:
-        print(i, j)
+        # print(i, j)
         return i == len(input_line)
     else:
         return j == len(tokens)

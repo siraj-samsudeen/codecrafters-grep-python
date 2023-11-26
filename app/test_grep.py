@@ -1,3 +1,4 @@
+import pytest
 from grep import tokenize, match_pattern
 
 def test_tokenizer():
@@ -9,8 +10,12 @@ def test_tokenizer():
     assert tokenize('[abcd]') == ['[abcd]']
     assert tokenize('ab[abcd]') == ['ab', '[abcd]']
     assert tokenize('[abcd]ab') == ['[abcd]', 'ab']
+    assert tokenize('a+ apple') == ['a+', ' apple']
+    assert tokenize('a+apple') == ['a+', 'apple']
+    assert tokenize('apple+') == ['appl','e+']
+    assert tokenize('ca+t') == ['c','a+', 't']
 
-
+# @pytest.mark.skip("hi")
 def test_match_pattern():
     assert match_pattern('dog', 'd')
     assert not match_pattern('dog', 'f')
@@ -38,3 +43,8 @@ def test_match_pattern():
 
     assert match_pattern('dog', 'dog$')
     assert not match_pattern('dogs', 'dog$')
+
+    assert match_pattern( 'apple','a+')
+    assert match_pattern( 'SaaS','a+')
+    assert not match_pattern( 'dog','a+')
+    assert match_pattern( 'caaats','ca+t')
