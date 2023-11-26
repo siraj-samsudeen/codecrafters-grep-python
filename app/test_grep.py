@@ -14,6 +14,8 @@ def test_tokenizer():
     assert tokenize('a+apple') == ['a+', 'apple']
     assert tokenize('apple+') == ['appl','e+']
     assert tokenize('ca+t') == ['c','a+', 't']
+    assert tokenize('dogs?') == ['dog','s?']
+    assert tokenize('ca?t') == ['c','a?', 't']
 
 # @pytest.mark.skip("hi")
 def test_match_pattern():
@@ -48,3 +50,8 @@ def test_match_pattern():
     assert match_pattern( 'SaaS','a+')
     assert not match_pattern( 'dog','a+')
     assert match_pattern( 'caaats','ca+t')
+
+    assert match_pattern( 'doga','dogs?')
+    assert match_pattern( 'dog','dogs?')
+    
+    assert match_pattern( 'act','ca?t')
