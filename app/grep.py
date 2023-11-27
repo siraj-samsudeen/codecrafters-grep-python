@@ -1,5 +1,5 @@
 def tokenize(pattern):
-    special_chars = '\\['
+    special_chars = '\\[.'
     tokens = []
 
     token = char_needed = ''
@@ -20,13 +20,14 @@ def tokenize(pattern):
     for char in pattern:
         if char in special_chars:
             flush()
+
         if char == '\\':
             len_needed = 2
         elif char == '[':
             char_needed=']'
 
         token += char
-        if len(token) == len_needed or char == char_needed:
+        if len(token) == len_needed or char == char_needed or char == '.':
             flush()
         
         if char in '+?':
@@ -71,7 +72,7 @@ def match_pattern(input_line, pattern):
 
 
     while i < len(input_line) and j < len(tokens):
-        print(repr(input_line[i]), repr(tokens[j]), matchFailed)
+        print(repr(input_line[i]), repr(tokens[j]))
         token = tokens[j]
 
         if token == '\\d':
@@ -102,6 +103,8 @@ def match_pattern(input_line, pattern):
                 process_match(True, 1)
             else:
                 process_match(True, 0)
+        elif token == '.':
+                process_match(True, 1)
         else: # literal match
             print("literal ",token)
             text = input_line[i: i+len(token)]
